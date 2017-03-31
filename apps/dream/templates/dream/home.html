@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>home</title>
+  </head>
+  <body>
+    Hello {{request.session.first}}!
+    </h3> {% if not request.session.first %}
+    <h5>
+        <a href="{% url 'wishlist:login' %}">Login</a>
+      </h5> {% endif %}
+      {% if request.session.first %}
+    <a href="{% url 'wishlist:logout' %}">Logout</a> {% endif %}<br />
+    <h3>Your Wish List:</h3>
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Added By</th>
+        <th>Date Added</th>
+        <th>Action</th>
+      </tr>
+      {% for u in user_items %}
+      <tr>
+        <td><a href="{% url 'wishlist:itempage' item_id=u.id %}">{{u.name}}</td>
+        <td>{{u.user.first_name}}</td>
+        <td>{{u.created_at}}</td>
+        <td><a href="{% url 'wishlist:removefromlist' item_id=u.id %}">Remove From List</a></td>
+          {% endfor %}
+      </tr>
+    </table>
+    <h3>Other Items:</h3>
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Added By</th>
+        <th>Date Added</th>
+        <th>Action</th>
+      </tr>
+      {% for o in other_items%}
+      <tr>
+        <td><a href="{% url 'wishlist:itempage' item_id=o.id %}">{{o.name}}</a></td>
+        <td>{{o.user.first_name}}</td>
+        <td>{{o.created_at}}</td>
+        <td><a href="{% url 'wishlist:addtolist' item_id=o.id %}">Add To List</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+    <a href="{% url 'wishlist:additem' %}">Add Item</a>
+  </body>
+</html>
